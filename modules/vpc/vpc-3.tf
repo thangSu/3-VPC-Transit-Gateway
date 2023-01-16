@@ -44,7 +44,7 @@ resource "aws_internet_gateway" "vpc_3_igw" {
 #----------------------------------------------------
 ## Route Table
 resource "aws_route_table" "vpc-3-public-rt" {
-  vpc_id = aws_vpc.vpc_1.id
+  vpc_id = aws_vpc.vpc_3.id
 
   route {
     cidr_block = "0.0.0.0/0"
