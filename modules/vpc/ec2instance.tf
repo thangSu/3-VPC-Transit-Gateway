@@ -81,6 +81,13 @@ resource "aws_security_group" "vpc-1-allow_icmp" {
   vpc_id      = aws_vpc.vpc_1.id
 
   ingress {
+    description      = "ssh"
+    from_port        = 22
+    to_port          = 22
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+  }
+  ingress {
     description      = "ICMP"
     from_port        = -1
     to_port          = -1
@@ -161,6 +168,7 @@ resource "aws_instance" "vpc_1_ec2" {
   iam_instance_profile = aws_iam_instance_profile.ec2-profile.name
   vpc_security_group_ids = [aws_security_group.vpc-1-allow_icmp.id]
   subnet_id = aws_subnet.vpc_1_public_subnet.id
+  associate_public_ip_address = true
 
   tags = {
     "Name" = "vpc-1-ec2"
