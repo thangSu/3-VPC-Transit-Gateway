@@ -15,6 +15,7 @@ resource "aws_subnet" "vpc_3_private_subnet" {
   vpc_id     = aws_vpc.vpc_3.id
   cidr_block = "10.2.0.0/24"
   availability_zone = var.availability_zone[0]
+  map_public_ip_on_launch = false
 
   tags = {
     "Name" = "vpc-3-private subnet"
@@ -32,23 +33,13 @@ resource "aws_subnet" "vpc_3_public_subnet" {
 }
 
 #----------------------------------------------------
-## Internet Gateway
-resource "aws_internet_gateway" "vpc_3_igw" {
-  vpc_id = aws_vpc.vpc_3.id
-
-  tags = {
-    "Name" = "vpc 3 igw"
-  }
-}
-
-#----------------------------------------------------
 ## Route Table
 resource "aws_route_table" "vpc-3-public-rt" {
   vpc_id = aws_vpc.vpc_3.id
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.vpc_3_igw.id
+    transit_gateway_id = aws_ec2_transit_gateway.tgw.id
   }
 
   tags = {

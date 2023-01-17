@@ -15,6 +15,7 @@ resource "aws_subnet" "vpc_1_private_subnet" {
   vpc_id     = aws_vpc.vpc_1.id
   cidr_block = "10.0.0.0/24"
   availability_zone = var.availability_zone[0]
+  map_public_ip_on_launch = false
 
   tags = {
     "Name" = "vpc-1-private-subnet"
@@ -49,6 +50,11 @@ resource "aws_route_table" "vpc-1-public-rt" {
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.vpc_1_igw.id
+  }
+
+  route {
+    cidr_block = "10.0.0.0/8"
+    transit_gateway_id = aws_ec2_transit_gateway.tgw.id
   }
 
   tags = {
