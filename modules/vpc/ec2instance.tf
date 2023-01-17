@@ -210,6 +210,7 @@ resource "aws_instance" "vpc_2_ec2" {
   iam_instance_profile = aws_iam_instance_profile.ec2-profile.name
   vpc_security_group_ids = [aws_security_group.vpc-2-allow_icmp.id]
   subnet_id = aws_subnet.vpc_2_public_subnet.id
+  associate_public_ip_address = true
 
   tags = {
     "Name" = "vpc-2-ec2"
@@ -222,6 +223,7 @@ resource "aws_instance" "vpc_3_ec2" {
   iam_instance_profile = aws_iam_instance_profile.ec2-profile.name
   vpc_security_group_ids = [aws_security_group.vpc-3-allow_icmp.id]
   subnet_id = aws_subnet.vpc_3_public_subnet.id
+  associate_public_ip_address = true
 
   tags = {
     "Name" = "vpc-3-ec2"
