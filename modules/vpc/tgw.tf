@@ -28,7 +28,6 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "tgw-att-vpc-1" {
   tags               = {
     Name             = "tgw-att-vpc1"
   }
-  depends_on = ["aws_ec2_transit_gateway.tgw"]
 }
 
 resource "aws_ec2_transit_gateway_vpc_attachment" "tgw-att-vpc-2" {
@@ -41,7 +40,6 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "tgw-att-vpc-2" {
   tags               = {
     Name             = "tgw-att-vpc2"
   }
-  depends_on = ["aws_ec2_transit_gateway.tgw"]
 }
 
 resource "aws_ec2_transit_gateway_vpc_attachment" "tgw-att-vpc-3" {
@@ -54,7 +52,6 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "tgw-att-vpc-3" {
   tags               = {
     Name             = "tgw-att-vpc-3"
   }
-  depends_on = ["aws_ec2_transit_gateway.tgw"]
 }
 
 #----------------------------------------------------
@@ -64,7 +61,6 @@ resource "aws_ec2_transit_gateway_route_table" "tgw-inbound-rt" {
   tags               = {
     Name             = "tgw-inbound-rt"
   }
-  depends_on = ["aws_ec2_transit_gateway.tgw"]
 }
 
 resource "aws_ec2_transit_gateway_route_table" "tgw-outbound-rt" {
@@ -72,17 +68,7 @@ resource "aws_ec2_transit_gateway_route_table" "tgw-outbound-rt" {
   tags               = {
     Name             = "tgw-outbound-rt"
   }
-  depends_on = ["aws_ec2_transit_gateway.tgw"]
 }
-
-resource "aws_ec2_transit_gateway_route_table" "tgw-web-rt" {
-  transit_gateway_id = aws_ec2_transit_gateway.tgw.id
-  tags               = {
-    Name             = "tgw-web-rt"
-  }
-  depends_on = ["aws_ec2_transit_gateway.tgw"]
-}
-
 # #----------------------------------------------------
 # # Route Tables Associations
 # resource "aws_ec2_transit_gateway_route_table_association" "tgw-rt-vpc-1-assoc" {
