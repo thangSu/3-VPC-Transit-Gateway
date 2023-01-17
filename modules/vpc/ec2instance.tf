@@ -67,7 +67,7 @@ data "aws_ami" "ami" {
 
   filter {
     name   = "name"
-    values = ["amzn-ami-hvm-*-x86_64-ebs"]
+    values = ["amzn2-ami-kernel-5.10-hvm-*-x86_64-gp2"]
   }
 
   owners = ["amazon"]
