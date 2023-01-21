@@ -55,7 +55,7 @@ resource "aws_instance" "vpc_1_ec2" {
   ami = data.aws_ami.ami.id
   instance_type = "t2.micro"
   key_name = aws_key_pair.generated_key.key_name
-  vpc_security_group_ids = [aws_security_group.vpc-1-allow_icmp.id]
+  vpc_security_group_ids = [aws_security_group.vpc_1_sg.id]
   subnet_id = aws_subnet.vpc_1_public_subnet.id
   associate_public_ip_address = true
 
@@ -108,7 +108,7 @@ resource "aws_instance" "vpc_2_ec2" {
   ami = data.aws_ami.ami.id
   instance_type = "t2.micro"
   key_name = aws_key_pair.generated_key.key_name
-  vpc_security_group_ids = [aws_security_group.vpc-2-allow_icmp.id]
+  vpc_security_group_ids = [aws_security_group.vpc_2_sg.id]
   subnet_id = aws_subnet.vpc_2_public_subnet.id
   associate_public_ip_address = true
 
@@ -161,7 +161,7 @@ resource "aws_instance" "vpc_3_ec2" {
   ami = data.aws_ami.ami.id
   instance_type = "t2.micro"
   key_name = aws_key_pair.generated_key.key_name
-  vpc_security_group_ids = [aws_security_group.vpc-3-allow_icmp.id]
+  vpc_security_group_ids = [aws_security_group.vpc_3_sg.id]
   subnet_id = aws_subnet.vpc_3_public_subnet.id
   associate_public_ip_address = true
 
