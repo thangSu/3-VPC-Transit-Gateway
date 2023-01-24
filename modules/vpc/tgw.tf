@@ -26,7 +26,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "tgw-att-vpc-1" {
   #  transit_gateway_default_route_table_propagation = false
 
   tags               = {
-    Name             = "tgw-att-vpc1"
+    Name             = "tgw_att_vpc_1"
   }
 }
 
@@ -38,7 +38,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "tgw-att-vpc-2" {
   # transit_gateway_default_route_table_propagation = false
 
   tags               = {
-    Name             = "tgw-att-vpc2"
+    Name             = "tgw_att_vpc_2"
   }
 }
 
@@ -50,7 +50,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "tgw-att-vpc-3" {
   # transit_gateway_default_route_table_propagation = false
   
   tags               = {
-    Name             = "tgw-att-vpc-3"
+    Name             = "tgw_att_vpc_3"
   }
 }
 
