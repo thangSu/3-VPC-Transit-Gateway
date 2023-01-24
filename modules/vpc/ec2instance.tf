@@ -38,7 +38,7 @@ resource "aws_security_group" "vpc_1_sg" {
     from_port       = 22
     to_port         = 22
     protocol        = "TCP"
-    cidr_blocks = ["10.0.0.0/8"]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   # outbound internet access
@@ -65,7 +65,7 @@ resource "aws_instance" "vpc_1_ec2" {
 }
 
 #----------------------------------------------------
-## Instance VPC 1
+## Instance VPC 2
 # Security Group
 resource "aws_security_group" "vpc_2_sg" {
   name        = "vpc_2_sg"

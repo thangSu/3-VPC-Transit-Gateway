@@ -38,7 +38,7 @@ resource "aws_route_table" "vpc-3-public-rt" {
   vpc_id = aws_vpc.vpc_3.id
 
   route {
-    cidr_block = "0.0.0.0/0"
+    cidr_block = "10.0.0.0/8"
     transit_gateway_id = aws_ec2_transit_gateway.tgw.id
   }
 
@@ -48,6 +48,6 @@ resource "aws_route_table" "vpc-3-public-rt" {
 }
 
 resource "aws_route_table_association" "public_association" {
-  subnet_id      = aws_subnet.vpc_3_public_subnet.id
+  subnet_ids      = [aws_subnet.vpc_3_public_subnet.id, aws_subnet.vpc_3_private_subnet.id]
   route_table_id = aws_route_table.vpc-3-public-rt.id
 }

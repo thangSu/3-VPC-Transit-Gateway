@@ -56,19 +56,19 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "tgw-att-vpc-3" {
 
 #----------------------------------------------------
 ## TGW Route Table
-resource "aws_ec2_transit_gateway_route_table" "tgw-inbound-rt" {
-  transit_gateway_id = aws_ec2_transit_gateway.tgw.id
-  tags               = {
-    Name             = "tgw-inbound-rt"
-  }
-}
+# resource "aws_ec2_transit_gateway_route_table" "tgw-inbound-rt" {
+#   transit_gateway_id = aws_ec2_transit_gateway.tgw.id
+#   tags               = {
+#     Name             = "tgw-inbound-rt"
+#   }
+# }
 
-resource "aws_ec2_transit_gateway_route_table" "tgw-outbound-rt" {
-  transit_gateway_id = aws_ec2_transit_gateway.tgw.id
-  tags               = {
-    Name             = "tgw-outbound-rt"
-  }
-}
+# resource "aws_ec2_transit_gateway_route_table" "tgw-outbound-rt" {
+#   transit_gateway_id = aws_ec2_transit_gateway.tgw.id
+#   tags               = {
+#     Name             = "tgw-outbound-rt"
+#   }
+# }
 # #----------------------------------------------------
 # # Route Tables Associations
 # resource "aws_ec2_transit_gateway_route_table_association" "tgw-rt-vpc-1-assoc" {
