@@ -39,7 +39,7 @@ resource "aws_instance" "bastion_host" {
   ami           = data.aws_ami.ami.id
   instance_type = "t2.micro"
   key_name = aws_key_pair.generated_key.key_name
-  vpc_security_group_ids = [ aws_security_group.bastion_host.id ]
+  vpc_security_group_ids = [ aws_security_group.bastion_sg.id ]
   subnet_id = aws_subnet.vpc_1_public_subnet.id
   associate_public_ip_address = true
   tags = {
