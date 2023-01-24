@@ -34,7 +34,7 @@ resource "aws_subnet" "vpc_2_public_subnet" {
 
 #----------------------------------------------------
 ## Route Table
-resource "aws_route_table" "vpc-2-public-rt" {
+resource "aws_route_table" "vpc_2_public_rt" {
   vpc_id = aws_vpc.vpc_2.id
 
   route {
@@ -47,7 +47,11 @@ resource "aws_route_table" "vpc-2-public-rt" {
   }
 }
 
-resource "aws_route_table_association" "vpc_2_public_asso" {
-  subnet_ids     = [aws_subnet.vpc_2_public_subnet.id, aws_subnet.vpc_2_private_subnet.id]
-  route_table_id = aws_route_table.vpc-2-public-rt.id
+resource "aws_route_table_association" "vpc_2_public_association" {
+  subnet_id      = aws_subnet.vpc_2_public_subnet.id
+  route_table_id = aws_route_table.vpc_2_public_rt.id
+}
+resource "aws_route_table_association" "vpc_2_private_association" {
+  subnet_id      = aws_subnet.vpc_2_private_subnet.id
+  route_table_id = aws_route_table.vpc_2_public_rt.id
 }
