@@ -64,11 +64,6 @@ resource "aws_route_table" "vpc_1_public_rt" {
     gateway_id = aws_internet_gateway.vpc_1_igw.id
   }
 
-  route {
-    cidr_block = "10.0.0.0/8"
-    transit_gateway_id = aws_ec2_transit_gateway.tgw.id
-  }
-
   tags = {
     "Name" = "vpc-1-public-rt"
   }
@@ -82,6 +77,11 @@ resource "aws_route_table_association" "vpc_1_public_association" {
 
 resource "aws_route_table" "vpc_1_nat_rt" {
   vpc_id = aws_vpc.vpc_1.id
+
+  route {
+    cidr_block = "10.0.0.0/8"
+    transit_gateway_id = aws_ec2_transit_gateway.tgw.id
+  }
 
   route {
     cidr_block = "0.0.0.0/0"
