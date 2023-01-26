@@ -14,38 +14,38 @@ data "aws_ami" "ami" {
 #----------------------------------------------------
 ## Bastion Host VPC 1
 # Security Group
-resource "aws_security_group" "bastion_sg" {
-  name        = "bastion_sg"
-  vpc_id      = aws_vpc.vpc_1.id
+# resource "aws_security_group" "bastion_sg" {
+#   name        = "bastion_sg"
+#   vpc_id      = aws_vpc.vpc_1.id
 
-  # access from the internet
-  ingress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+#   # access from the internet
+#   ingress {
+#     from_port   = 0
+#     to_port     = 0
+#     protocol    = "-1"
+#     cidr_blocks = ["0.0.0.0/0"]
+#   }
 
-  # outbound internet access
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-# Instance
-resource "aws_instance" "bastion_host" {
-  ami           = data.aws_ami.ami.id
-  instance_type = "t2.micro"
-  key_name = aws_key_pair.generated_key.key_name
-  vpc_security_group_ids = [ aws_security_group.bastion_sg.id ]
-  subnet_id = aws_subnet.vpc_1_public_subnet.id
-  associate_public_ip_address = true
-  tags = {
-    Name = "Bastion Host"
-  }
-}
+#   # outbound internet access
+#   egress {
+#     from_port   = 0
+#     to_port     = 0
+#     protocol    = "-1"
+#     cidr_blocks = ["0.0.0.0/0"]
+#   }
+# }
+# # Instance
+# resource "aws_instance" "bastion_host" {
+#   ami           = data.aws_ami.ami.id
+#   instance_type = "t2.micro"
+#   key_name = aws_key_pair.generated_key.key_name
+#   vpc_security_group_ids = [ aws_security_group.bastion_sg.id ]
+#   subnet_id = aws_subnet.vpc_1_public_subnet.id
+#   associate_public_ip_address = true
+#   tags = {
+#     Name = "Bastion Host"
+#   }
+# }
 
 #----------------------------------------------------
 ## Instance VPC 1
@@ -57,25 +57,32 @@ resource "aws_security_group" "vpc_1_sg" {
 
   # HTTP/S and SSH from the internet
   ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "TCP"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "TCP"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+  # ingress {
+  #   from_port   = 80
+  #   to_port     = 80
+  #   protocol    = "TCP"
+  #   cidr_blocks = ["0.0.0.0/0"]
+  # }
 
-  ingress {
-    from_port       = 22
-    to_port         = 22
-    protocol        = "TCP"
-    cidr_blocks = ["10.0.0.0/8"]
-  }
+  # ingress {
+  #   from_port   = 443
+  #   to_port     = 443
+  #   protocol    = "TCP"
+  #   cidr_blocks = ["0.0.0.0/0"]
+  # }
+
+  # ingress {
+  #   from_port       = 22
+  #   to_port         = 22
+  #   protocol        = "TCP"
+  #   cidr_blocks = ["10.0.0.0/8"]
+  # }
 
   # outbound internet access
   egress {
@@ -92,8 +99,8 @@ resource "aws_instance" "vpc_1_ec2" {
   instance_type = "t2.micro"
   key_name = aws_key_pair.generated_key.key_name
   vpc_security_group_ids = [aws_security_group.vpc_1_sg.id]
-  subnet_id = aws_subnet.vpc_1_private_subnet.id
-  associate_public_ip_address = false
+  subnet_id = aws_subnet.vpc_1_public_subnet.id
+  associate_public_ip_address = true
 
   tags = {
     "Name" = "vpc-1-ec2"
