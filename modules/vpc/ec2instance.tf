@@ -12,42 +12,6 @@ data "aws_ami" "ami" {
 }
 
 #----------------------------------------------------
-## Bastion Host VPC 1
-# Security Group
-# resource "aws_security_group" "bastion_sg" {
-#   name        = "bastion_sg"
-#   vpc_id      = aws_vpc.vpc_1.id
-
-#   # access from the internet
-#   ingress {
-#     from_port   = 0
-#     to_port     = 0
-#     protocol    = "-1"
-#     cidr_blocks = ["0.0.0.0/0"]
-#   }
-
-#   # outbound internet access
-#   egress {
-#     from_port   = 0
-#     to_port     = 0
-#     protocol    = "-1"
-#     cidr_blocks = ["0.0.0.0/0"]
-#   }
-# }
-# # Instance
-# resource "aws_instance" "bastion_host" {
-#   ami           = data.aws_ami.ami.id
-#   instance_type = "t2.micro"
-#   key_name = aws_key_pair.generated_key.key_name
-#   vpc_security_group_ids = [ aws_security_group.bastion_sg.id ]
-#   subnet_id = aws_subnet.vpc_1_public_subnet.id
-#   associate_public_ip_address = true
-#   tags = {
-#     Name = "Bastion Host"
-#   }
-# }
-
-#----------------------------------------------------
 ## Instance VPC 1
 # Security Group
 resource "aws_security_group" "vpc_1_sg" {
@@ -57,25 +21,39 @@ resource "aws_security_group" "vpc_1_sg" {
 
   # HTTP/S and SSH from the internet
   ingress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # ingress {
-  #   from_port   = 80
-  #   to_port     = 80
-  #   protocol    = "TCP"
-  #   cidr_blocks = ["0.0.0.0/0"]
-  # }
+  ingress {
+    from_port   = 8 # the ICMP type number for 'Echo'
+    to_port     = 0 # the ICMP code
+    protocol    = "icmp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
-  # ingress {
-  #   from_port   = 443
-  #   to_port     = 443
-  #   protocol    = "TCP"
-  #   cidr_blocks = ["0.0.0.0/0"]
-  # }
+  ingress {
+    from_port   = 0 # the ICMP type number for 'Echo Reply'
+    to_port     = 0 # the ICMP code
+    protocol    = "icmp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "TCP"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "TCP"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
   # ingress {
   #   from_port       = 22
@@ -116,6 +94,19 @@ resource "aws_security_group" "vpc_2_sg" {
   vpc_id      = aws_vpc.vpc_2.id
 
   # HTTP/S and SSH from the internet
+  ingress {
+    from_port   = 8 # the ICMP type number for 'Echo'
+    to_port     = 0 # the ICMP code
+    protocol    = "icmp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 0 # the ICMP type number for 'Echo Reply'
+    to_port     = 0 # the ICMP code
+    protocol    = "icmp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
   ingress {
     from_port   = 80
     to_port     = 80
@@ -170,6 +161,20 @@ resource "aws_security_group" "vpc_3_sg" {
 
   # HTTP/S and SSH from the internet
   ingress {
+    from_port   = 8 # the ICMP type number for 'Echo'
+    to_port     = 0 # the ICMP code
+    protocol    = "icmp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 0 # the ICMP type number for 'Echo Reply'
+    to_port     = 0 # the ICMP code
+    protocol    = "icmp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  
+  ingress {
     from_port   = 80
     to_port     = 80
     protocol    = "TCP"
@@ -207,6 +212,7 @@ resource "aws_instance" "vpc_3_ec2" {
   vpc_security_group_ids = [aws_security_group.vpc_3_sg.id]
   subnet_id = aws_subnet.vpc_3_private_subnet.id
   associate_public_ip_address = false
+  user_data                   = file("userdata-vpc-3.sh")
 
   tags = {
     "Name" = "vpc-3-ec2"
