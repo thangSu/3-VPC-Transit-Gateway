@@ -78,7 +78,7 @@ resource "aws_route_table_association" "vpc_1_public_association" {
   subnet_id      = aws_subnet.vpc_1_public_subnet.id
   route_table_id = aws_route_table.vpc_1_public_rt.id
 }
-resource "aws_route_table_association" "vpc_2_private_association" {
+resource "aws_route_table_association" "vpc_1_private_association" {
   subnet_id      = aws_subnet.vpc_1_private_subnet.id
   route_table_id = aws_route_table.vpc_1_public_rt.id
 }
