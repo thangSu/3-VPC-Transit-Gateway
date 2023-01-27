@@ -19,7 +19,7 @@ resource "aws_ec2_transit_gateway" "tgw" {
 #----------------------------------------------------
 ## VPC attachment
 resource "aws_ec2_transit_gateway_vpc_attachment" "tgw-att-vpc-1" {
-  subnet_ids         = [aws_subnet.vpc_1_public_subnet.id, aws_subnet.vpc_1_private_subnet.id]
+  subnet_ids         = [aws_subnet.vpc_1_private_subnet.id]
   transit_gateway_id = aws_ec2_transit_gateway.tgw.id
   vpc_id             = aws_vpc.vpc_1.id
   #  transit_gateway_default_route_table_association = false
@@ -31,7 +31,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "tgw-att-vpc-1" {
 }
 
 resource "aws_ec2_transit_gateway_vpc_attachment" "tgw-att-vpc-2" {
-  subnet_ids         = [aws_subnet.vpc_2_public_subnet.id, aws_subnet.vpc_2_private_subnet.id]
+  subnet_ids         = [aws_subnet.vpc_2_private_subnet.id]
   transit_gateway_id = aws_ec2_transit_gateway.tgw.id
   vpc_id             = aws_vpc.vpc_2.id
   # transit_gateway_default_route_table_association = false
@@ -43,7 +43,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "tgw-att-vpc-2" {
 }
 
 resource "aws_ec2_transit_gateway_vpc_attachment" "tgw-att-vpc-3" {
-  subnet_ids         = [aws_subnet.vpc_3_public_subnet.id, aws_subnet.vpc_3_private_subnet.id]
+  subnet_ids         = [aws_subnet.vpc_3_private_subnet.id]
   transit_gateway_id = aws_ec2_transit_gateway.tgw.id
   vpc_id             = aws_vpc.vpc_3.id
   # transit_gateway_default_route_table_association = false

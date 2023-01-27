@@ -107,7 +107,7 @@ resource "aws_security_group" "vpc_1_sg" {
     from_port       = 22
     to_port         = 22
     protocol        = "TCP"
-    cidr_blocks = ["10.0.0.0/8"]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   # outbound internet access
@@ -260,7 +260,7 @@ resource "aws_instance" "vpc_3_ec2" {
   vpc_security_group_ids = [aws_security_group.vpc_3_sg.id]
   subnet_id = aws_subnet.vpc_3_private_subnet.id
   associate_public_ip_address = false
-  user_data                   = file("userdata-vpc-3.sh")
+  # user_data                   = file("userdata-vpc-3.sh")
 
   tags = {
     "Name" = "vpc-3-ec2"
