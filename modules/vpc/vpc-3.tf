@@ -13,8 +13,8 @@ resource "aws_vpc" "vpc_3" {
 ## Subnet
 resource "aws_subnet" "vpc_3_private_subnet" {
   vpc_id     = aws_vpc.vpc_3.id
-  cidr_block = "10.2.0.0/24"
-  availability_zone = var.availability_zone[0]
+  cidr_block = var.vpc_3_subnet_cidr[0]
+  availability_zone = var.availability_zone
   map_public_ip_on_launch = false
 
   tags = {
@@ -24,8 +24,8 @@ resource "aws_subnet" "vpc_3_private_subnet" {
 
 resource "aws_subnet" "vpc_3_public_subnet" {
   vpc_id     = aws_vpc.vpc_3.id
-  cidr_block = "10.2.1.0/24"
-  availability_zone = var.availability_zone[1]
+  cidr_block = var.vpc_3_subnet_cidr[1]
+  availability_zone = var.availability_zone
   map_public_ip_on_launch = true
 
   tags = {
@@ -35,7 +35,7 @@ resource "aws_subnet" "vpc_3_public_subnet" {
 
 #----------------------------------------------------
 ## Route Table
-resource "aws_route_table" "vpc_3_public_rt" {
+resource "aws_route_table" "vpc_3_tgw_rt" {
   vpc_id = aws_vpc.vpc_3.id
 
   route {
@@ -55,9 +55,9 @@ resource "aws_route_table" "vpc_3_public_rt" {
 
 resource "aws_route_table_association" "vpc_3_public_association" {
   subnet_id      = aws_subnet.vpc_3_public_subnet.id
-  route_table_id = aws_route_table.vpc_3_public_rt.id
+  route_table_id = aws_route_table.vpc_3_tgw_rt.id
 }
 resource "aws_route_table_association" "vpc_3_private_association" {
   subnet_id      = aws_subnet.vpc_3_private_subnet.id
-  route_table_id = aws_route_table.vpc_3_public_rt.id
+  route_table_id = aws_route_table.vpc_3_tgw_rt.id
 }

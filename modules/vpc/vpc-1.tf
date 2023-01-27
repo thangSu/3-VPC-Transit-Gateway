@@ -13,8 +13,8 @@ resource "aws_vpc" "vpc_1" {
 ## Subnet
 resource "aws_subnet" "vpc_1_private_subnet" {
   vpc_id     = aws_vpc.vpc_1.id
-  cidr_block = "10.0.0.0/24"
-  availability_zone = var.availability_zone[0]
+  cidr_block = var.vpc_1_subnet_cidr[0]
+  availability_zone = var.availability_zone
   map_public_ip_on_launch = false
 
   tags = {
@@ -24,8 +24,8 @@ resource "aws_subnet" "vpc_1_private_subnet" {
 
 resource "aws_subnet" "vpc_1_public_subnet" {
   vpc_id     = aws_vpc.vpc_1.id
-  cidr_block = "10.0.1.0/24"
-  availability_zone = var.availability_zone[1]
+  cidr_block = var.vpc_1_subnet_cidr[1]
+  availability_zone = var.availability_zone
   map_public_ip_on_launch = true
 
   tags = {
@@ -56,17 +56,12 @@ resource "aws_internet_gateway" "vpc_1_igw" {
 
 #----------------------------------------------------
 ## Route Table
-resource "aws_route_table" "vpc_1_public_rt" {
+resource "aws_route_table" "vpc_1_igw_rt" {
   vpc_id = aws_vpc.vpc_1.id
 
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.vpc_1_igw.id
-  }
-  
-  route {
-    cidr_block = "10.0.0.0/8"
-    transit_gateway_id = aws_ec2_transit_gateway.tgw.id
   }
 
   tags = {
@@ -76,27 +71,24 @@ resource "aws_route_table" "vpc_1_public_rt" {
 
 resource "aws_route_table_association" "vpc_1_public_association" {
   subnet_id      = aws_subnet.vpc_1_public_subnet.id
-  route_table_id = aws_route_table.vpc_1_public_rt.id
+  route_table_id = aws_route_table.vpc_1_igw_rt.id
+}
+
+resource "aws_route_table" "vpc_1_tgw_rt" {
+  vpc_id = aws_vpc.vpc_1.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    transit_gateway_id = aws_ec2_transit_gateway.tgw.id
+  }
+
+  route {
+    cidr_block = "10.0.0.0/8"
+    transit_gateway_id = aws_ec2_transit_gateway.tgw.id
+  }
+
 }
 resource "aws_route_table_association" "vpc_1_private_association" {
   subnet_id      = aws_subnet.vpc_1_private_subnet.id
-  route_table_id = aws_route_table.vpc_1_public_rt.id
+  route_table_id = aws_route_table.vpc_1_tgw_rt.id
 }
-
-# resource "aws_route_table" "vpc_1_nat_rt" {
-#   vpc_id = aws_vpc.vpc_1.id
-
-#   route {
-#     cidr_block = "10.0.0.0/8"
-#     transit_gateway_id = aws_ec2_transit_gateway.tgw.id
-#   }
-
-#   route {
-#     cidr_block = "0.0.0.0/0"
-#     nat_gateway_id = aws_nat_gateway.nat_gw.id
-#   }
-# }
-# resource "aws_route_table_association" "vpc_1_private_association" {
-#   subnet_id      = aws_subnet.vpc_1_private_subnet.id
-#   route_table_id = aws_route_table.vpc_1_nat_rt.id
-# }
