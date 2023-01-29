@@ -92,7 +92,7 @@ resource "aws_route_table" "vpc_2_nat_rt" {
   }
 }
 
-resource "aws_route_table_association" "vpc_2_public_association" {
+resource "aws_route_table_association" "vpc_2_public_nat_association" {
   subnet_id      = aws_subnet.vpc_2_private_subnet.id
   route_table_id = aws_route_table.vpc_2_nat_rt.id
 }
@@ -110,7 +110,7 @@ resource "aws_route_table" "vpc_2_igw_rt" {
   }
 }
 
-resource "aws_route_table_association" "vpc_2_public_association" {
+resource "aws_route_table_association" "vpc_2_public_igw_association" {
   subnet_id      = aws_subnet.vpc_2_public_subnet.id
   route_table_id = aws_route_table.vpc_2_igw_rt.id
 }
