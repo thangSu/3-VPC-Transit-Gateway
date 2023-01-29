@@ -138,9 +138,8 @@ resource "aws_network_acl" "aws_nacl" {
   #   to_port    = 22
   # }
 
-  
+  }
 tags = {
     Name = "NACL"
-}
 }
 

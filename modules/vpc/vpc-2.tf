@@ -34,6 +34,27 @@ resource "aws_subnet" "vpc_2_public_subnet" {
 }
 
 #----------------------------------------------------
+## Internet Gateway
+resource "aws_internet_gateway" "vpc_2_igw" {
+  vpc_id = aws_vpc.vpc_2.id
+
+  tags = {
+    "Name" = "vpc-2-igw"
+  }
+}
+
+#----------------------------------------------------
+## NAT Gateway
+resource "aws_eip" "nat_gw_eip" {
+  vpc = true
+}
+
+resource "aws_nat_gateway" "nat_gw" {
+  allocation_id = aws_eip.nat_gw_eip.id
+  subnet_id     = aws_subnet.vpc_2_public_subnet.id
+}
+
+#----------------------------------------------------
 ## Route Table
 resource "aws_route_table" "vpc_2_tgw_rt" {
   vpc_id = aws_vpc.vpc_2.id
@@ -49,15 +70,47 @@ resource "aws_route_table" "vpc_2_tgw_rt" {
   }
 
   tags = {
-    "Name" = "vpc-2-public-rt"
+    "Name" = "vpc-2-tgw-rt"
+  }
+}
+
+resource "aws_route_table_association" "vpc_2_private_association" {
+  subnet_id      = aws_subnet.vpc_2_private_subnet.id
+  route_table_id = aws_route_table.vpc_2_tgw_rt.id
+}
+
+resource "aws_route_table" "vpc_2_nat_rt" {
+  vpc_id = aws_vpc.vpc_2.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.nat_gw.id
+  }
+
+  tags = {
+    "Name" = "vpc-2-nat-rt"
+  }
+}
+
+resource "aws_route_table_association" "vpc_2_public_association" {
+  subnet_id      = aws_subnet.vpc_2_private_subnet.id
+  route_table_id = aws_route_table.vpc_2_nat_rt.id
+}
+
+resource "aws_route_table" "vpc_2_igw_rt" {
+  vpc_id = aws_vpc.vpc_2.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.vpc_2_igw.id
+  }
+
+  tags = {
+    "Name" = "vpc-2-igw-rt"
   }
 }
 
 resource "aws_route_table_association" "vpc_2_public_association" {
   subnet_id      = aws_subnet.vpc_2_public_subnet.id
-  route_table_id = aws_route_table.vpc_2_tgw_rt.id
-}
-resource "aws_route_table_association" "vpc_2_private_association" {
-  subnet_id      = aws_subnet.vpc_2_private_subnet.id
-  route_table_id = aws_route_table.vpc_2_tgw_rt.id
+  route_table_id = aws_route_table.vpc_2_igw_rt.id
 }
