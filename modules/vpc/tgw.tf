@@ -7,7 +7,7 @@
 ## - the Prod VPC can only reach the Shared VPC
 ## The default setup being a full mesh scenario where all VPCs can see every other
 resource "aws_ec2_transit_gateway" "tgw" {
-  description = "3 vpc tgw"
+  description = "3-vpc-tgw"
   # default_route_table_association = "disable"
   # default_route_table_propagation = "disable"
 
@@ -43,7 +43,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "tgw-att-vpc-2" {
 }
 
 resource "aws_ec2_transit_gateway_vpc_attachment" "tgw-att-vpc-3" {
-  subnet_ids         = [aws_subnet.vpc_3_private_subnet.id]
+  subnet_ids         = [aws_subnet.vpc_3_private_subnet.id,aws_subnet.vpc_3_public_subnet.id]
   transit_gateway_id = aws_ec2_transit_gateway.tgw.id
   vpc_id             = aws_vpc.vpc_3.id
   # transit_gateway_default_route_table_association = false
@@ -54,19 +54,17 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "tgw-att-vpc-3" {
   }
 }
 
-
-
 #----------------------------------------------------
 ## TGW Route Table
-resource "aws_ec2_transit_gateway_route_table" "association_default_route_table" {
-  transit_gateway_id = aws_ec2_transit_gateway.tgw.id
-}
+# resource "aws_ec2_transit_gateway_route_table" "association_default_route_table" {
+#   transit_gateway_id = aws_ec2_transit_gateway.tgw.id
+# }
 
-resource "aws_ec2_transit_gateway_route" "tgw_rt" {
-  destination_cidr_block = "0.0.0.0/0"
-  transit_gateway_attachment_id = aws_ec2_transit_gateway_vpc_attachment.tgw-att-vpc-2.id
-  transit_gateway_route_table_id = aws_ec2_transit_gateway.tgw.association_default_route_table_id
-}
+# resource "aws_ec2_transit_gateway_route" "tgw_rt" {
+#   destination_cidr_block = "0.0.0.0/0"
+#   transit_gateway_attachment_id = aws_ec2_transit_gateway_vpc_attachment.tgw-att-vpc-2.id
+#   transit_gateway_route_table_id = aws_ec2_transit_gateway.tgw.association_default_route_table_id
+# }
 
 # #----------------------------------------------------
 # # Route Tables Associations

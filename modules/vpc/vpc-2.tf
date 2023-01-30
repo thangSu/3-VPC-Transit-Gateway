@@ -5,7 +5,7 @@ resource "aws_vpc" "vpc_2" {
   enable_dns_hostnames = true
   
   tags = {
-    Name = "vpc_2"
+    Name = "vpc-2"
   }
 }
 
@@ -25,7 +25,7 @@ resource "aws_subnet" "vpc_2_private_subnet" {
 resource "aws_subnet" "vpc_2_public_subnet" {
   vpc_id     = aws_vpc.vpc_2.id
   cidr_block = var.vpc_2_subnet_cidr[1]
-  availability_zone = var.availability_zone[1]
+  availability_zone = var.availability_zone[0]
   map_public_ip_on_launch = true
 
   tags = {
@@ -100,7 +100,7 @@ resource "aws_route_table" "vpc_2_public_rt" {
   }
 }
 
-resource "aws_route_table_association" "vpc_2_public_igw_association" {
+resource "aws_route_table_association" "vpc_2_public_association" {
   subnet_id      = aws_subnet.vpc_2_public_subnet.id
   route_table_id = aws_route_table.vpc_2_public_rt.id
 }
