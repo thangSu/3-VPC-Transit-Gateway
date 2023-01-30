@@ -43,6 +43,11 @@ resource "aws_route_table" "vpc_3_private_rt" {
     transit_gateway_id = aws_ec2_transit_gateway.tgw.id
   }
 
+    route {
+    cidr_block = "10.0.0.0/8"
+    transit_gateway_id = aws_ec2_transit_gateway.tgw.id
+  }
+
   tags = {
     "Name" = "vpc-3-private-rt"
   }

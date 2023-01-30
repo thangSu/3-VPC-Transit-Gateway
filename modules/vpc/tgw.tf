@@ -56,18 +56,77 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "tgw-att-vpc-3" {
 
 #----------------------------------------------------
 ## TGW Route Table
-# resource "aws_ec2_transit_gateway_route_table" "association_default_route_table" {
+# # Inbound
+# resource "aws_ec2_transit_gateway_route_table" "tgw-inbound-rt" {
 #   transit_gateway_id = aws_ec2_transit_gateway.tgw.id
+
+#   tags               = {
+#     Name             = "tgw-inbound-rt"
+#   }
+# }
+# resource "aws_ec2_transit_gateway_route" "tgw_rt" {
+#   destination_cidr_block = "10.1.0.0/16"
+#   transit_gateway_attachment_id = aws_ec2_transit_gateway_vpc_attachment.tgw-att-vpc-2.id
+#   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.tgw-inbound-rt.id
+# }
+# resource "aws_ec2_transit_gateway_route" "tgw_rt" {
+#   destination_cidr_block = "10.2.0.0/16"
+#   transit_gateway_attachment_id = aws_ec2_transit_gateway_vpc_attachment.tgw-att-vpc-3.id
+#   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.tgw-inbound-rt.id
 # }
 
-# resource "aws_ec2_transit_gateway_route" "tgw_rt" {
+# # Outbound
+# resource "aws_ec2_transit_gateway_route_table" "tgw-outbound-rt" {
+#   transit_gateway_id = aws_ec2_transit_gateway.tgw.id
+
+#   tags               = {
+#     Name             = "tgw-outbound-rt"
+#   }
+# }
+# resource "aws_ec2_transit_gateway_route" "outbound_inbound_tgw_route" {
+#   destination_cidr_block = "10.0.0.0/16"
+#   transit_gateway_attachment_id = aws_ec2_transit_gateway_vpc_attachment.tgw-att-vpc-1.id
+#   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.tgw-outbound-rt.id
+# }
+
+# resource "aws_ec2_transit_gateway_route" "outbound_web_route" {
+#   destination_cidr_block = "10.2.0.0/16"
+#   transit_gateway_attachment_id = aws_ec2_transit_gateway_vpc_attachment.tgw-att-vpc-3.id
+#   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.tgw-outbound-rt.id
+# }
+
+# # Web
+# resource "aws_ec2_transit_gateway_route_table" "tgw-web-rt" {
+#   transit_gateway_id = aws_ec2_transit_gateway.tgw.id
+
+#   tags               = {
+#     Name             = "tgw-web-rt"
+#   }
+# }
+
+# resource "aws_ec2_transit_gateway_route" "web_inbound_route" {
+#   destination_cidr_block = "0.0.0.0/0"
+#   transit_gateway_attachment_id = aws_ec2_transit_gateway_vpc_attachment.tgw-att-vpc-1.id
+#   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.tgw-web-rt.id
+# }
+# resource "aws_ec2_transit_gateway_route" "web_outbound_route" {
 #   destination_cidr_block = "0.0.0.0/0"
 #   transit_gateway_attachment_id = aws_ec2_transit_gateway_vpc_attachment.tgw-att-vpc-2.id
-#   transit_gateway_route_table_id = aws_ec2_transit_gateway.tgw.association_default_route_table_id
+#   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.tgw-web-rt.id
+# }
+# resource "aws_ec2_transit_gateway_route" "web_blackhole_1" {
+#   destination_cidr_block         = "10.0.0.0/8"
+#   blackhole                      = true
+#   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.tgw-web-rt.id
+# }
+# resource "aws_ec2_transit_gateway_route" "web_blackhole_2" {
+#   destination_cidr_block         = "10.1.0.0/16"
+#   blackhole                      = true
+#   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.tgw-web-rt.id
 # }
 
-# #----------------------------------------------------
-# # Route Tables Associations
+# # #----------------------------------------------------
+# # # Route Tables Associations
 # resource "aws_ec2_transit_gateway_route_table_association" "tgw-rt-vpc-1-assoc" {
 #   transit_gateway_attachment_id = aws_ec2_transit_gateway_vpc_attachment.tgw-att-vpc-1.id
 #   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.tgw-inbound-rt.id
