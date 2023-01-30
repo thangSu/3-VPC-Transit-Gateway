@@ -68,6 +68,12 @@ resource "aws_route_table" "vpc_2_private_rt" {
     cidr_block = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.nat_gw.id
   }
+  
+  # Transit gateway
+  route {
+    cidr_block = "10.0.0.0/8"
+    transit_gateway_id = aws_ec2_transit_gateway.tgw.id
+  }
 
   tags = {
     "Name" = "vpc-2-private-rt"
