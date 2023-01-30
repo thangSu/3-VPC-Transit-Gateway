@@ -18,7 +18,7 @@ resource "aws_subnet" "vpc_3_private_subnet" {
   map_public_ip_on_launch = false
 
   tags = {
-    "Name" = "vpc-3-private subnet"
+    "Name" = "vpc-3-private-subnet-1"
   }
 }
 
@@ -26,16 +26,16 @@ resource "aws_subnet" "vpc_3_public_subnet" {
   vpc_id     = aws_vpc.vpc_3.id
   cidr_block = var.vpc_3_subnet_cidr[1]
   availability_zone = var.availability_zone[1]
-  map_public_ip_on_launch = true
+  map_public_ip_on_launch = false
 
   tags = {
-    "Name" = "vpc-3-public-subnet"
+    "Name" = "vpc-3-private-subnet-2"
   }
 }
 
 #----------------------------------------------------
 ## Route Table
-resource "aws_route_table" "vpc_3_tgw_rt" {
+resource "aws_route_table" "vpc_3_private_rt" {
   vpc_id = aws_vpc.vpc_3.id
 
   route {
@@ -44,15 +44,15 @@ resource "aws_route_table" "vpc_3_tgw_rt" {
   }
 
   tags = {
-    "Name" = "vpc-3-public-rt"
+    "Name" = "vpc-3-private-rt"
   }
 }
 
 resource "aws_route_table_association" "vpc_3_public_association" {
   subnet_id      = aws_subnet.vpc_3_public_subnet.id
-  route_table_id = aws_route_table.vpc_3_tgw_rt.id
+  route_table_id = aws_route_table.vpc_3_private_rt.id
 }
 resource "aws_route_table_association" "vpc_3_private_association" {
   subnet_id      = aws_subnet.vpc_3_private_subnet.id
-  route_table_id = aws_route_table.vpc_3_tgw_rt.id
+  route_table_id = aws_route_table.vpc_3_private_rt.id
 }

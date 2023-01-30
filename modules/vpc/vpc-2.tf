@@ -52,18 +52,16 @@ resource "aws_eip" "nat_gw_eip" {
 resource "aws_nat_gateway" "nat_gw" {
   allocation_id = aws_eip.nat_gw_eip.id
   subnet_id     = aws_subnet.vpc_2_public_subnet.id
+
+    tags = {
+    "Name" = "vpc-2-nat-gw"
+  }
 }
 
 #----------------------------------------------------
 ## Route Table
 resource "aws_route_table" "vpc_2_private_rt" {
   vpc_id = aws_vpc.vpc_2.id
-
-  # Transit gateway
-  route {
-    cidr_block = "10.0.0.0/8"
-    transit_gateway_id = aws_ec2_transit_gateway.tgw.id
-  }
 
   # Nat gateway
   route {
@@ -72,7 +70,7 @@ resource "aws_route_table" "vpc_2_private_rt" {
   }
 
   tags = {
-    "Name" = "vpc-2-tgw-rt"
+    "Name" = "vpc-2-private-rt"
   }
 }
 
@@ -91,8 +89,14 @@ resource "aws_route_table" "vpc_2_public_rt" {
     gateway_id = aws_internet_gateway.vpc_2_igw.id
   }
 
+  # Transit gateway
+  route {
+    cidr_block = "10.0.0.0/8"
+    transit_gateway_id = aws_ec2_transit_gateway.tgw.id
+  }
+
   tags = {
-    "Name" = "vpc-2-igw-rt"
+    "Name" = "vpc-2-public-rt"
   }
 }
 
