@@ -76,7 +76,6 @@ resource "aws_route_table" "vpc_1_private_rt" {
     transit_gateway_id = aws_ec2_transit_gateway.tgw.id
   }
 
-
     tags = {
     "Name" = "vpc-1-private-rt"
   }

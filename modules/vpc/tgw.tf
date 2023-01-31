@@ -56,6 +56,16 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "tgw-att-vpc-3" {
 
 #----------------------------------------------------
 ## TGW Route Table
+resource "aws_ec2_transit_gateway_route_table" "association_default_route_table" {
+  transit_gateway_id = aws_ec2_transit_gateway.tgw.id
+}
+
+# TGW Route Table
+resource "aws_ec2_transit_gateway_route" "tgw_default_route" {
+  destination_cidr_block         = "0.0.0.0/0"
+  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.tgw-att-vpc-2.id
+  transit_gateway_route_table_id = aws_ec2_transit_gateway.tgw.association_default_route_table_id
+}
 # # Inbound
 # resource "aws_ec2_transit_gateway_route_table" "tgw-inbound-rt" {
 #   transit_gateway_id = aws_ec2_transit_gateway.tgw.id
