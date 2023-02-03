@@ -32,12 +32,11 @@ pipeline {
 
     // Action
     stage('Action'){
-        stages{
             steps{
                 sh"terraform ${params.Actions} -auto-approve"
             }
         }
-    }
+
 
     // Complete
     stage('Terraform Completed'){
